@@ -12,6 +12,7 @@ import Signup from "./pages/Signup";
 import Dashboard from "./pages/Dashboard";
 import Booking from "./pages/Booking";
 import NotFound from "./pages/NotFound";
+import ServiceMarketplace from "./pages/ServiceMarketplace";
 
 const queryClient = new QueryClient();
 
@@ -27,6 +28,7 @@ const App = () => (
           <Route path="/signup" element={<Signup />} />
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/book/:businessId" element={<Booking />} />
+          <Route path="/marketplace" element={<ServiceMarketplace />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>
