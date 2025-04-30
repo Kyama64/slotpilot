@@ -13,6 +13,9 @@ import Dashboard from "./pages/Dashboard";
 import Booking from "./pages/Booking";
 import NotFound from "./pages/NotFound";
 import ServiceMarketplace from "./pages/ServiceMarketplace";
+import GitHubConnect from "./pages/GitHubConnect";
+import GitHubCallback from "./pages/GitHubCallback";
+import GitHubDashboard from "./pages/GitHubDashboard";
 
 const queryClient = new QueryClient();
 
@@ -29,6 +32,9 @@ const App = () => (
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/book/:businessId" element={<Booking />} />
           <Route path="/marketplace" element={<ServiceMarketplace />} />
+          <Route path="/github/connect" element={<GitHubConnect />} />
+          <Route path="/github/callback" element={<GitHubCallback />} />
+          <Route path="/github/dashboard" element={<GitHubDashboard />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>
