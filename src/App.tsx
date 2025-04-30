@@ -16,6 +16,7 @@ import ServiceMarketplace from "./pages/ServiceMarketplace";
 import GitHubConnect from "./pages/GitHubConnect";
 import GitHubCallback from "./pages/GitHubCallback";
 import GitHubDashboard from "./pages/GitHubDashboard";
+import Admin from "./pages/Admin";
 
 const queryClient = new QueryClient();
 
@@ -35,6 +36,7 @@ const App = () => (
           <Route path="/github/connect" element={<GitHubConnect />} />
           <Route path="/github/callback" element={<GitHubCallback />} />
           <Route path="/github/dashboard" element={<GitHubDashboard />} />
+          <Route path="/admin" element={<Admin />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>
