@@ -1,6 +1,6 @@
 
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import {
   Calendar,
   Clock,
@@ -81,6 +81,7 @@ const Dashboard = () => {
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const isMobile = useIsMobile();
   const { toast } = useToast();
+  const navigate = useNavigate();
 
   const todayBookings = mockBookings.filter(booking => booking.date === "2025-04-29");
   const confirmedBookings = mockBookings.filter(booking => booking.status === "confirmed");
@@ -94,9 +95,10 @@ const Dashboard = () => {
   };
 
   const handleNewBooking = () => {
+    navigate("/marketplace");
     toast({
-      title: "Feature coming soon",
-      description: "Creating new bookings will be available in the next update.",
+      title: "Creating new booking",
+      description: "You've been redirected to the marketplace to select a service.",
     });
   };
 
