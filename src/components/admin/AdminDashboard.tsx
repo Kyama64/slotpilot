@@ -1,5 +1,4 @@
-
-import { BarChart, PieChart, User, Database } from "lucide-react";
+import { BarChart, PieChart, User, Database, CalendarClock } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { 
   BarChart as RechartsBarChart,
