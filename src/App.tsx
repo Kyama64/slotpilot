@@ -15,6 +15,8 @@ import Customers from "./pages/Customers";
 import Analytics from "./pages/Analytics";
 import Settings from "./pages/Settings";
 import Booking from "./pages/Booking";
+import Features from "./pages/Features";
+import Pricing from "./pages/Pricing";
 import NotFound from "./pages/NotFound";
 import ServiceMarketplace from "./pages/ServiceMarketplace";
 import GitHubConnect from "./pages/GitHubConnect";
@@ -40,6 +42,8 @@ const App = () => (
           <Route path="/analytics" element={<Analytics />} />
           <Route path="/settings" element={<Settings />} />
           <Route path="/book/:businessId" element={<Booking />} />
+          <Route path="/features" element={<Features />} />
+          <Route path="/pricing" element={<Pricing />} />
           <Route path="/marketplace" element={<ServiceMarketplace />} />
           <Route path="/github/connect" element={<GitHubConnect />} />
           <Route path="/github/callback" element={<GitHubCallback />} />
