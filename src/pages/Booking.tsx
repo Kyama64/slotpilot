@@ -1,6 +1,6 @@
 
-import { useState } from "react";
-import { Calendar, Clock } from "lucide-react";
+import { useState, useEffect } from "react";
+import { Calendar, Clock, Check } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -8,6 +8,8 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Label } from "@/components/ui/label";
 import { Calendar as CalendarComponent } from "@/components/ui/calendar";
 import { useToast } from "@/hooks/use-toast";
+import { Badge } from "@/components/ui/badge";
+import { useParams } from "react-router-dom";
 
 interface TimeSlot {
   id: string;
@@ -34,11 +36,45 @@ interface Service {
   price: string;
 }
 
-const mockServices = [
-  { id: "1", name: "Haircut", duration: "30 min", price: "$30" },
-  { id: "2", name: "Hair Color", duration: "90 min", price: "$120" },
-  { id: "3", name: "Styling", duration: "45 min", price: "$50" },
-];
+// Mock services for different business plans
+const mockBusinessData = {
+  starter: {
+    name: "Alex's Hair Studio",
+    plan: "Starter",
+    planFeatures: ["Up to 30 bookings/month", "Basic analytics", "3 services"],
+    services: [
+      { id: "1", name: "Basic Haircut", duration: "30 min", price: "$25" },
+      { id: "2", name: "Simple Styling", duration: "20 min", price: "$20" },
+      { id: "3", name: "Quick Trim", duration: "15 min", price: "$15" },
+    ],
+  },
+  pro: {
+    name: "Elite Salon & Spa",
+    plan: "Professional",
+    planFeatures: ["Unlimited bookings", "Detailed analytics", "Up to 10 services", "SMS notifications"],
+    services: [
+      { id: "1", name: "Premium Haircut", duration: "45 min", price: "$40" },
+      { id: "2", name: "Full Color Service", duration: "120 min", price: "$120" },
+      { id: "3", name: "Styling", duration: "30 min", price: "$35" },
+      { id: "4", name: "Facial Treatment", duration: "60 min", price: "$65" },
+      { id: "5", name: "Manicure", duration: "45 min", price: "$45" },
+    ],
+  },
+  business: {
+    name: "Wellness Center Complete",
+    plan: "Business",
+    planFeatures: ["Unlimited everything", "Advanced reporting", "Staff management", "Custom booking page", "API access"],
+    services: [
+      { id: "1", name: "Executive Haircut & Style", duration: "60 min", price: "$75" },
+      { id: "2", name: "Full Spa Package", duration: "180 min", price: "$200" },
+      { id: "3", name: "Deep Tissue Massage", duration: "90 min", price: "$120" },
+      { id: "4", name: "Premium Facial", duration: "75 min", price: "$95" },
+      { id: "5", name: "Body Scrub & Wrap", duration: "120 min", price: "$150" },
+      { id: "6", name: "Hair Coloring", duration: "120 min", price: "$140" },
+      { id: "7", name: "Nail Art", duration: "60 min", price: "$65" },
+    ],
+  },
+};
 
 const Booking = () => {
   const [date, setDate] = useState<Date | undefined>(new Date());
@@ -48,7 +84,22 @@ const Booking = () => {
   const [customerName, setCustomerName] = useState<string>("");
   const [customerEmail, setCustomerEmail] = useState<string>("");
   const [customerPhone, setCustomerPhone] = useState<string>("");
+  const [businessData, setBusinessData] = useState<any>(null);
   const { toast } = useToast();
+  const { businessId } = useParams<{ businessId: string }>();
+
+  useEffect(() => {
+    // In a real app, you'd fetch the business data from an API using the businessId
+    // For this demo, we'll map the ID to our mock data
+    const planType = businessId?.toLowerCase() || "pro";
+    
+    if (planType in mockBusinessData) {
+      setBusinessData(mockBusinessData[planType as keyof typeof mockBusinessData]);
+    } else {
+      // Default to pro plan if ID doesn't match
+      setBusinessData(mockBusinessData.pro);
+    }
+  }, [businessId]);
 
   const handleServiceSelect = (serviceId: string) => {
     setSelectedService(serviceId);
@@ -104,23 +155,56 @@ const Booking = () => {
     setCustomerPhone("");
   };
 
-  const selectedServiceData = selectedService 
-    ? mockServices.find(service => service.id === selectedService) 
+  const selectedServiceData = selectedService && businessData?.services 
+    ? businessData.services.find((service: Service) => service.id === selectedService) 
     : null;
 
   const selectedTimeSlotData = selectedTimeSlot 
     ? mockTimeSlots.find(slot => slot.id === selectedTimeSlot) 
     : null;
 
+  if (!businessData) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <p>Loading business data...</p>
+      </div>
+    );
+  }
+
+  const getPlanBadgeColor = (plan: string) => {
+    switch (plan.toLowerCase()) {
+      case "starter": return "bg-blue-100 text-blue-800";
+      case "professional": return "bg-purple-100 text-purple-800";
+      case "business": return "bg-green-100 text-green-800";
+      default: return "bg-gray-100 text-gray-800";
+    }
+  };
+
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-50 py-12 px-4">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-50 py-8 px-4">
       <div className="max-w-4xl mx-auto">
-        <div className="text-center mb-10">
-          <div className="inline-flex items-center space-x-2 mb-4">
-            <Calendar className="h-6 w-6 text-primary" />
-            <h1 className="text-2xl font-bold">Alex's Hair Studio</h1>
+        <div className="text-center mb-8">
+          <div className="inline-flex items-center space-x-2 mb-2">
+            <Calendar className="h-5 w-5 text-primary" />
+            <h1 className="text-xl md:text-2xl font-bold">{businessData.name}</h1>
           </div>
-          <p className="text-gray-600 max-w-lg mx-auto">
+          
+          <div className="flex justify-center mb-4">
+            <Badge className={`${getPlanBadgeColor(businessData.plan)}`}>
+              {businessData.plan} Plan
+            </Badge>
+          </div>
+          
+          <div className="flex flex-wrap justify-center gap-3 mb-4">
+            {businessData.planFeatures.map((feature: string, index: number) => (
+              <div key={index} className="flex items-center text-xs md:text-sm text-gray-600">
+                <Check className="h-3 w-3 md:h-4 md:w-4 text-green-500 mr-1" />
+                <span>{feature}</span>
+              </div>
+            ))}
+          </div>
+          
+          <p className="text-gray-600 max-w-lg mx-auto text-sm md:text-base">
             Book your appointment online. Select a service, choose a date and time, and provide your contact information.
           </p>
         </div>
@@ -134,15 +218,15 @@ const Booking = () => {
             <div className="mb-6">
               <div className="flex items-center justify-between mb-4">
                 <div className="flex items-center">
-                  <div className={`w-8 h-8 rounded-full flex items-center justify-center ${step >= 1 ? 'bg-primary text-white' : 'bg-gray-200 text-gray-600'}`}>
+                  <div className={`w-7 h-7 md:w-8 md:h-8 rounded-full flex items-center justify-center ${step >= 1 ? 'bg-primary text-white' : 'bg-gray-200 text-gray-600'}`}>
                     1
                   </div>
-                  <div className={`h-1 w-10 mx-1 ${step >= 2 ? 'bg-primary' : 'bg-gray-200'}`}></div>
-                  <div className={`w-8 h-8 rounded-full flex items-center justify-center ${step >= 2 ? 'bg-primary text-white' : 'bg-gray-200 text-gray-600'}`}>
+                  <div className={`h-1 w-5 md:w-10 mx-1 ${step >= 2 ? 'bg-primary' : 'bg-gray-200'}`}></div>
+                  <div className={`w-7 h-7 md:w-8 md:h-8 rounded-full flex items-center justify-center ${step >= 2 ? 'bg-primary text-white' : 'bg-gray-200 text-gray-600'}`}>
                     2
                   </div>
-                  <div className={`h-1 w-10 mx-1 ${step >= 3 ? 'bg-primary' : 'bg-gray-200'}`}></div>
-                  <div className={`w-8 h-8 rounded-full flex items-center justify-center ${step >= 3 ? 'bg-primary text-white' : 'bg-gray-200 text-gray-600'}`}>
+                  <div className={`h-1 w-5 md:w-10 mx-1 ${step >= 3 ? 'bg-primary' : 'bg-gray-200'}`}></div>
+                  <div className={`w-7 h-7 md:w-8 md:h-8 rounded-full flex items-center justify-center ${step >= 3 ? 'bg-primary text-white' : 'bg-gray-200 text-gray-600'}`}>
                     3
                   </div>
                 </div>
@@ -155,8 +239,8 @@ const Booking = () => {
             {step === 1 && (
               <div className="animate-fade-in">
                 <h3 className="font-medium text-lg mb-4">Select a Service</h3>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  {mockServices.map((service) => (
+                <div className="grid grid-cols-1 gap-3">
+                  {businessData.services.map((service: Service) => (
                     <div 
                       key={service.id}
                       className={`p-4 border rounded-lg cursor-pointer transition-all ${
@@ -193,7 +277,7 @@ const Booking = () => {
                         mode="single"
                         selected={date}
                         onSelect={handleDateSelect}
-                        className="rounded-md border p-3 pointer-events-auto"
+                        className="rounded-md border p-2 md:p-3 pointer-events-auto"
                         disabled={(date) => {
                           // Disable past dates and Sundays (day 0)
                           const today = new Date();
@@ -211,16 +295,16 @@ const Booking = () => {
                         <span>Please select a date first</span>
                       )}
                     </div>
-                    <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+                    <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 md:gap-3">
                       {mockTimeSlots.map((slot) => (
                         <Button
                           key={slot.id}
                           variant={selectedTimeSlot === slot.id ? "default" : "outline"}
-                          className={`flex items-center justify-center ${!slot.available ? 'opacity-50 cursor-not-allowed' : ''}`}
+                          className={`flex items-center justify-center text-xs md:text-sm ${!slot.available ? 'opacity-50 cursor-not-allowed' : ''}`}
                           disabled={!slot.available}
                           onClick={() => slot.available && handleTimeSlotSelect(slot.id)}
                         >
-                          <Clock className="mr-2 h-4 w-4" />
+                          <Clock className="mr-1 h-3 w-3 md:h-4 md:w-4" />
                           {slot.time}
                         </Button>
                       ))}
@@ -254,8 +338,8 @@ const Booking = () => {
                   </div>
                 </div>
                 
-                <div className="space-y-4">
-                  <div className="space-y-2">
+                <div className="space-y-3 md:space-y-4">
+                  <div className="space-y-1 md:space-y-2">
                     <Label htmlFor="name">Full Name</Label>
                     <Input 
                       id="name"
@@ -265,7 +349,7 @@ const Booking = () => {
                     />
                   </div>
                   
-                  <div className="space-y-2">
+                  <div className="space-y-1 md:space-y-2">
                     <Label htmlFor="email">Email</Label>
                     <Input 
                       id="email"
@@ -276,7 +360,7 @@ const Booking = () => {
                     />
                   </div>
                   
-                  <div className="space-y-2">
+                  <div className="space-y-1 md:space-y-2">
                     <Label htmlFor="phone">Phone Number</Label>
                     <Input 
                       id="phone"
@@ -291,7 +375,7 @@ const Booking = () => {
           </CardContent>
           <CardFooter className="flex justify-between">
             {step > 1 ? (
-              <Button variant="outline" onClick={handlePreviousStep}>
+              <Button variant="outline" onClick={handlePreviousStep} className="text-sm">
                 Back
               </Button>
             ) : (
@@ -302,13 +386,14 @@ const Booking = () => {
               <Button 
                 onClick={handleNextStep}
                 disabled={(step === 1 && !selectedService) || (step === 2 && !selectedTimeSlot)}
+                className="text-sm"
               >
                 Continue
               </Button>
             ) : (
               <Button 
                 onClick={handleBookAppointment}
-                className="bg-success hover:bg-success/90"
+                className="bg-success hover:bg-success/90 text-sm"
               >
                 Confirm Booking
               </Button>
