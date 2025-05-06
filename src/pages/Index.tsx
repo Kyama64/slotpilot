@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
-import { Calendar, Clock, CreditCard, Gift, BarChart3, Check } from "lucide-react";
+import { Calendar, Clock, CreditCard, Gift, BarChart3, Check, UserCircle, Briefcase } from "lucide-react";
 
 const Index = () => {
   return (
@@ -27,7 +27,7 @@ const Index = () => {
                     <Link to="/signup">Get started for free</Link>
                   </Button>
                   <Button asChild variant="outline" size="lg">
-                    <Link to="/demo">View demo</Link>
+                    <Link to="/marketplace">Browse services</Link>
                   </Button>
                 </div>
               </div>
@@ -39,6 +39,88 @@ const Index = () => {
                     alt="Calendar scheduling interface" 
                     className="w-full h-auto rounded-xl" 
                   />
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+        
+        {/* User path selection section */}
+        <section className="py-16 bg-white">
+          <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="text-center max-w-3xl mx-auto mb-12">
+              <h2 className="text-3xl font-bold text-gray-900 mb-4">
+                Choose your path
+              </h2>
+              <p className="text-lg text-gray-600">
+                Whether you're looking to book a service or offer services to clients, SnapSchedule has you covered.
+              </p>
+            </div>
+            
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl mx-auto">
+              {/* Customer path */}
+              <div className="bg-white rounded-xl p-8 shadow-md border border-gray-100 hover:shadow-lg transition-shadow">
+                <div className="bg-blue-100 rounded-full p-4 w-16 h-16 flex items-center justify-center mb-6 mx-auto">
+                  <UserCircle className="h-8 w-8 text-primary" />
+                </div>
+                <h3 className="text-2xl font-bold text-gray-900 text-center mb-4">I'm a Customer</h3>
+                <p className="text-gray-600 text-center mb-8">
+                  Looking to book services? Browse our marketplace and find the perfect service provider for your needs.
+                </p>
+                <div className="space-y-4">
+                  <div className="flex items-start">
+                    <Check className="h-5 w-5 text-success flex-shrink-0 mr-2 mt-1" />
+                    <span className="text-gray-600">Browse services from various providers</span>
+                  </div>
+                  <div className="flex items-start">
+                    <Check className="h-5 w-5 text-success flex-shrink-0 mr-2 mt-1" />
+                    <span className="text-gray-600">Book appointments with real-time availability</span>
+                  </div>
+                  <div className="flex items-start">
+                    <Check className="h-5 w-5 text-success flex-shrink-0 mr-2 mt-1" />
+                    <span className="text-gray-600">Manage your bookings in one place</span>
+                  </div>
+                </div>
+                <div className="mt-8 flex flex-col space-y-3">
+                  <Button asChild size="lg">
+                    <Link to="/marketplace">Browse Services</Link>
+                  </Button>
+                  <Button asChild variant="outline">
+                    <Link to="/customer/login">Customer Login</Link>
+                  </Button>
+                </div>
+              </div>
+              
+              {/* Provider path */}
+              <div className="bg-white rounded-xl p-8 shadow-md border border-primary border-opacity-50 hover:shadow-lg transition-shadow">
+                <div className="bg-primary bg-opacity-10 rounded-full p-4 w-16 h-16 flex items-center justify-center mb-6 mx-auto">
+                  <Briefcase className="h-8 w-8 text-primary" />
+                </div>
+                <h3 className="text-2xl font-bold text-gray-900 text-center mb-4">I'm a Service Provider</h3>
+                <p className="text-gray-600 text-center mb-8">
+                  Ready to grow your business? Showcase your services and let clients book appointments online.
+                </p>
+                <div className="space-y-4">
+                  <div className="flex items-start">
+                    <Check className="h-5 w-5 text-success flex-shrink-0 mr-2 mt-1" />
+                    <span className="text-gray-600">Create a professional booking page</span>
+                  </div>
+                  <div className="flex items-start">
+                    <Check className="h-5 w-5 text-success flex-shrink-0 mr-2 mt-1" />
+                    <span className="text-gray-600">Manage your services and availability</span>
+                  </div>
+                  <div className="flex items-start">
+                    <Check className="h-5 w-5 text-success flex-shrink-0 mr-2 mt-1" />
+                    <span className="text-gray-600">Get insights into your booking performance</span>
+                  </div>
+                </div>
+                <div className="mt-8 flex flex-col space-y-3">
+                  <Button asChild size="lg">
+                    <Link to="/signup">Get Started Free</Link>
+                  </Button>
+                  <Button asChild variant="outline">
+                    <Link to="/provider/login">Provider Login</Link>
+                  </Button>
                 </div>
               </div>
             </div>

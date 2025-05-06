@@ -23,6 +23,8 @@ import GitHubConnect from "./pages/GitHubConnect";
 import GitHubCallback from "./pages/GitHubCallback";
 import GitHubDashboard from "./pages/GitHubDashboard";
 import Admin from "./pages/Admin";
+import CustomerLogin from "./pages/CustomerLogin";
+import ProviderLogin from "./pages/ProviderLogin";
 
 const queryClient = new QueryClient();
 
@@ -35,6 +37,8 @@ const App = () => (
         <Routes>
           <Route path="/" element={<Index />} />
           <Route path="/login" element={<Login />} />
+          <Route path="/customer/login" element={<CustomerLogin />} />
+          <Route path="/provider/login" element={<ProviderLogin />} />
           <Route path="/signup" element={<Signup />} />
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/services" element={<Services />} />
