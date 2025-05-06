@@ -1,6 +1,6 @@
 
 import { useState, useEffect } from "react";
-import { Calendar, Clock, Check } from "lucide-react";
+import { Calendar, Clock, Check, MapPin, Phone, Mail, Star } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -34,45 +34,76 @@ interface Service {
   name: string;
   duration: string;
   price: string;
+  description?: string;
 }
 
-// Mock services for different business plans
+// Enhanced mock services with detailed descriptions for different business plans
 const mockBusinessData = {
   starter: {
     name: "Alex's Hair Studio",
     plan: "Starter",
+    tagline: "Quality haircuts at affordable prices",
+    location: "123 Main St, New York, NY",
+    phone: "(555) 123-4567",
+    email: "contact@alexhairstudio.com",
+    coverImage: "https://images.unsplash.com/photo-1560066984-138dadb4c035?auto=format&fit=crop&q=80&w=1000&h=300",
     planFeatures: ["Up to 30 bookings/month", "Basic analytics", "3 services"],
     services: [
-      { id: "1", name: "Basic Haircut", duration: "30 min", price: "$25" },
-      { id: "2", name: "Simple Styling", duration: "20 min", price: "$20" },
-      { id: "3", name: "Quick Trim", duration: "15 min", price: "$15" },
+      { id: "1", name: "Basic Haircut", description: "Classic haircut with scissors and clipper, includes wash and style.", duration: "30 min", price: "$25" },
+      { id: "2", name: "Simple Styling", description: "Basic styling for any occasion, perfect for a quick refresh.", duration: "20 min", price: "$20" },
+      { id: "3", name: "Quick Trim", description: "Fast touch-up to maintain your current style.", duration: "15 min", price: "$15" },
     ],
+    testimonials: [
+      { name: "John D.", rating: 4.8, text: "Quick and professional service every time!" },
+      { name: "Sarah M.", rating: 4.7, text: "Great value for the price, will come again." }
+    ]
   },
   pro: {
     name: "Elite Salon & Spa",
     plan: "Professional",
+    tagline: "Elevate your look with our premium services",
+    location: "456 Fashion Ave, Los Angeles, CA",
+    phone: "(555) 987-6543",
+    email: "appointments@elitesalon.com",
+    coverImage: "https://images.unsplash.com/photo-1633681926022-84c23e8cb2d6?auto=format&fit=crop&q=80&w=1000&h=300",
     planFeatures: ["Unlimited bookings", "Detailed analytics", "Up to 10 services", "SMS notifications"],
     services: [
-      { id: "1", name: "Premium Haircut", duration: "45 min", price: "$40" },
-      { id: "2", name: "Full Color Service", duration: "120 min", price: "$120" },
-      { id: "3", name: "Styling", duration: "30 min", price: "$35" },
-      { id: "4", name: "Facial Treatment", duration: "60 min", price: "$65" },
-      { id: "5", name: "Manicure", duration: "45 min", price: "$45" },
+      { id: "1", name: "Premium Haircut", description: "Precision cutting technique customized for your face shape and hair texture.", duration: "45 min", price: "$40" },
+      { id: "2", name: "Full Color Service", description: "Complete color transformation including consultation, application, and styling.", duration: "120 min", price: "$120" },
+      { id: "3", name: "Styling", description: "Professional styling for any occasion, from casual to formal events.", duration: "30 min", price: "$35" },
+      { id: "4", name: "Facial Treatment", description: "Rejuvenating facial treatment to cleanse, exfoliate and hydrate your skin.", duration: "60 min", price: "$65" },
+      { id: "5", name: "Manicure", description: "Complete nail care with cuticle treatment, shaping, and polish application.", duration: "45 min", price: "$45" },
     ],
+    testimonials: [
+      { name: "Jennifer K.", rating: 5.0, text: "The best salon experience I've ever had!" },
+      { name: "Michael R.", rating: 4.9, text: "Worth every penny - truly premium service." },
+      { name: "Lisa T.", rating: 4.8, text: "I won't go anywhere else now." }
+    ]
   },
   business: {
     name: "Wellness Center Complete",
     plan: "Business",
+    tagline: "Your complete wellness journey starts here",
+    location: "789 Wellness Blvd, Miami, FL",
+    phone: "(555) 789-0123",
+    email: "bookings@wellnesscomplete.com",
+    coverImage: "https://images.unsplash.com/photo-1544161515-4ab6ce6db874?auto=format&fit=crop&q=80&w=1000&h=300",
     planFeatures: ["Unlimited everything", "Advanced reporting", "Staff management", "Custom booking page", "API access"],
     services: [
-      { id: "1", name: "Executive Haircut & Style", duration: "60 min", price: "$75" },
-      { id: "2", name: "Full Spa Package", duration: "180 min", price: "$200" },
-      { id: "3", name: "Deep Tissue Massage", duration: "90 min", price: "$120" },
-      { id: "4", name: "Premium Facial", duration: "75 min", price: "$95" },
-      { id: "5", name: "Body Scrub & Wrap", duration: "120 min", price: "$150" },
-      { id: "6", name: "Hair Coloring", duration: "120 min", price: "$140" },
-      { id: "7", name: "Nail Art", duration: "60 min", price: "$65" },
+      { id: "1", name: "Executive Haircut & Style", description: "Premium service with personalized consultation, precision cutting, and luxury styling experience.", duration: "60 min", price: "$75" },
+      { id: "2", name: "Full Spa Package", description: "Comprehensive spa treatment including massage, facial, body scrub, and aromatherapy.", duration: "180 min", price: "$200" },
+      { id: "3", name: "Deep Tissue Massage", description: "Therapeutic massage focusing on deeper layers of muscle tissue to release chronic patterns of tension.", duration: "90 min", price: "$120" },
+      { id: "4", name: "Premium Facial", description: "Advanced facial treatment with high-end products, customized for your specific skin concerns.", duration: "75 min", price: "$95" },
+      { id: "5", name: "Body Scrub & Wrap", description: "Full body exfoliation followed by a hydrating wrap to nourish and rejuvenate your skin.", duration: "120 min", price: "$150" },
+      { id: "6", name: "Hair Coloring", description: "Professional color service with premium products for vibrant, long-lasting results.", duration: "120 min", price: "$140" },
+      { id: "7", name: "Nail Art", description: "Creative nail design with intricate details and premium polish for a unique look.", duration: "60 min", price: "$65" },
     ],
+    testimonials: [
+      { name: "Robert J.", rating: 5.0, text: "The complete wellness experience - absolutely world-class!" },
+      { name: "Emily W.", rating: 5.0, text: "Worth the splurge for special occasions, incredible service." },
+      { name: "David L.", rating: 4.9, text: "My regular retreat for self-care, couldn't recommend more highly." },
+      { name: "Patricia M.", rating: 4.9, text: "The staff goes above and beyond every single time." }
+    ]
   },
 };
 
@@ -181,21 +212,42 @@ const Booking = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-50 py-8 px-4">
-      <div className="max-w-4xl mx-auto">
-        <div className="text-center mb-8">
-          <div className="inline-flex items-center space-x-2 mb-2">
-            <Calendar className="h-5 w-5 text-primary" />
-            <h1 className="text-xl md:text-2xl font-bold">{businessData.name}</h1>
-          </div>
-          
-          <div className="flex justify-center mb-4">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-50 pt-0 px-0 pb-8">
+      {/* Hero Banner with Cover Image */}
+      <div 
+        className="w-full h-48 md:h-64 bg-cover bg-center relative mb-6" 
+        style={{ backgroundImage: `url(${businessData.coverImage})` }}
+      >
+        <div className="absolute inset-0 bg-black bg-opacity-40 flex flex-col justify-end p-4 md:p-8">
+          <div className="text-white max-w-4xl mx-auto w-full">
+            <h1 className="text-2xl md:text-3xl font-bold mb-1">{businessData.name}</h1>
+            <p className="text-sm md:text-base opacity-90 mb-2">{businessData.tagline}</p>
             <Badge className={`${getPlanBadgeColor(businessData.plan)}`}>
-              {businessData.plan} Plan
+              {businessData.plan} Provider
             </Badge>
           </div>
+        </div>
+      </div>
+
+      <div className="max-w-4xl mx-auto px-4">
+        {/* Business Info */}
+        <div className="mb-6">
+          <div className="flex flex-wrap gap-3 mb-4 text-sm md:text-base text-gray-700">
+            <div className="flex items-center">
+              <MapPin className="h-4 w-4 md:h-5 md:w-5 text-gray-500 mr-1" />
+              <span>{businessData.location}</span>
+            </div>
+            <div className="flex items-center">
+              <Phone className="h-4 w-4 md:h-5 md:w-5 text-gray-500 mr-1" />
+              <span>{businessData.phone}</span>
+            </div>
+            <div className="flex items-center">
+              <Mail className="h-4 w-4 md:h-5 md:w-5 text-gray-500 mr-1" />
+              <span>{businessData.email}</span>
+            </div>
+          </div>
           
-          <div className="flex flex-wrap justify-center gap-3 mb-4">
+          <div className="flex flex-wrap justify-start gap-3 mb-4">
             {businessData.planFeatures.map((feature: string, index: number) => (
               <div key={index} className="flex items-center text-xs md:text-sm text-gray-600">
                 <Check className="h-3 w-3 md:h-4 md:w-4 text-green-500 mr-1" />
@@ -203,13 +255,9 @@ const Booking = () => {
               </div>
             ))}
           </div>
-          
-          <p className="text-gray-600 max-w-lg mx-auto text-sm md:text-base">
-            Book your appointment online. Select a service, choose a date and time, and provide your contact information.
-          </p>
         </div>
 
-        <Card className="shadow-lg glass-card">
+        <Card className="shadow-lg border-0 bg-white bg-opacity-95 backdrop-blur-sm mb-8">
           <CardHeader>
             <CardTitle>Book an Appointment</CardTitle>
             <CardDescription>Follow the steps to schedule your appointment</CardDescription>
@@ -250,12 +298,15 @@ const Booking = () => {
                       }`}
                       onClick={() => handleServiceSelect(service.id)}
                     >
-                      <div className="flex justify-between items-center">
+                      <div className="flex flex-col md:flex-row justify-between md:items-center">
                         <div>
                           <h4 className="font-medium">{service.name}</h4>
+                          {service.description && (
+                            <p className="text-sm text-gray-600 mt-1 mb-2">{service.description}</p>
+                          )}
                           <p className="text-sm text-gray-500">{service.duration}</p>
                         </div>
-                        <div className="font-medium">{service.price}</div>
+                        <div className="font-medium mt-2 md:mt-0">{service.price}</div>
                       </div>
                     </div>
                   ))}
@@ -400,6 +451,25 @@ const Booking = () => {
             )}
           </CardFooter>
         </Card>
+
+        {/* Testimonials Section */}
+        {businessData.testimonials && businessData.testimonials.length > 0 && (
+          <div className="mb-8">
+            <h3 className="text-lg font-medium mb-4">Client Reviews</h3>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              {businessData.testimonials.map((testimonial: any, index: number) => (
+                <div key={index} className="bg-white p-4 rounded-lg shadow-sm border border-gray-100">
+                  <div className="flex items-center mb-2">
+                    <Star className="h-4 w-4 text-yellow-400 fill-yellow-400" />
+                    <span className="ml-1 font-medium">{testimonial.rating.toFixed(1)}</span>
+                  </div>
+                  <p className="text-gray-700 text-sm mb-2">"{testimonial.text}"</p>
+                  <p className="text-sm text-gray-500">- {testimonial.name}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );

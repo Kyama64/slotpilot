@@ -1,7 +1,7 @@
 
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { Search, Plus, Filter, Star, CalendarCheck } from "lucide-react";
+import { Search, Plus, Star, CalendarCheck, Clock, Check } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -22,7 +22,7 @@ import {
 } from "@/components/ui/select";
 import { useToast } from "@/hooks/use-toast";
 
-// Mock services data
+// Enhanced mock services data with more details
 const mockServices = [
   {
     id: "s1",
@@ -32,6 +32,8 @@ const mockServices = [
     price: 45,
     duration: "45 min",
     rating: 4.8,
+    availability: "Usually available within 24 hours",
+    features: ["Consultation included", "Premium products", "Style guidance"],
     image: "https://images.unsplash.com/photo-1560066984-138dadb4c035?auto=format&fit=crop&q=80&w=300&h=200"
   },
   {
@@ -42,6 +44,8 @@ const mockServices = [
     price: 85,
     duration: "60 min",
     rating: 4.9,
+    availability: "Book 2-3 days in advance",
+    features: ["Hot towel treatment", "Aromatherapy options", "Post-massage guidance"],
     image: "https://images.unsplash.com/photo-1519823551278-64ac92734fb1?auto=format&fit=crop&q=80&w=300&h=200"
   },
   {
@@ -52,6 +56,8 @@ const mockServices = [
     price: 120,
     duration: "90 min",
     rating: 4.6,
+    availability: "Same-day emergency options",
+    features: ["Licensed plumbers", "Parts warranty", "Free estimates"],
     image: "https://images.unsplash.com/photo-1535732759880-bbd5c7265e3f?auto=format&fit=crop&q=80&w=300&h=200"
   },
   {
@@ -62,6 +68,8 @@ const mockServices = [
     price: 90,
     duration: "120 min",
     rating: 4.5,
+    availability: "Regular scheduling available",
+    features: ["Eco-friendly options", "Customizable cleaning plan", "Satisfaction guaranteed"],
     image: "https://images.unsplash.com/photo-1581578731548-c64695cc6952?auto=format&fit=crop&q=80&w=300&h=200"
   },
   {
@@ -72,6 +80,8 @@ const mockServices = [
     price: 1200,
     duration: "8 hours",
     rating: 4.9,
+    availability: "Book 3-6 months in advance",
+    features: ["Digital gallery", "Engagement shoot included", "Second photographer option"],
     image: "https://images.unsplash.com/photo-1529635141176-14b0fd281d43?auto=format&fit=crop&q=80&w=300&h=200"
   },
 ];
@@ -99,6 +109,7 @@ const Services = () => {
   };
 
   const handleBookService = (serviceId: string) => {
+    // In a real app, this would navigate to the booking page for the specific service
     toast({
       title: "Booking initiated",
       description: "Redirecting to booking page...",
@@ -115,7 +126,7 @@ const Services = () => {
           <div>
             <h1 className="text-3xl font-bold tracking-tight">Services</h1>
             <p className="text-muted-foreground">
-              Manage and view all services offered
+              Showcase your offerings and boost bookings
             </p>
           </div>
           
@@ -159,7 +170,7 @@ const Services = () => {
             </div>
           ) : (
             filteredServices.map((service) => (
-              <Card key={service.id} className="overflow-hidden">
+              <Card key={service.id} className="overflow-hidden flex flex-col h-full">
                 <div className="h-48 overflow-hidden">
                   <img 
                     src={service.image} 
@@ -167,35 +178,50 @@ const Services = () => {
                     className="w-full h-full object-cover transition-transform hover:scale-105"
                   />
                 </div>
-                <CardHeader>
+                <CardHeader className="pb-2">
                   <div className="flex justify-between items-start">
                     <CardTitle>{service.name}</CardTitle>
                     <Badge variant="outline">{service.category}</Badge>
                   </div>
-                  <CardDescription>{service.description}</CardDescription>
+                  <CardDescription className="line-clamp-2">{service.description}</CardDescription>
                 </CardHeader>
-                <CardContent>
-                  <div className="flex justify-between items-center">
+                <CardContent className="pb-2 flex-grow">
+                  <div className="flex justify-between items-center mb-3">
                     <div className="flex items-center">
                       <Star className="h-4 w-4 text-yellow-400 mr-1 fill-yellow-400" />
-                      <span className="font-medium">{service.rating}</span>
+                      <span className="font-medium">{service.rating.toFixed(1)}</span>
                     </div>
                     <div className="flex items-center gap-2">
+                      <Clock className="h-4 w-4 text-gray-500" />
                       <span className="text-sm text-muted-foreground">
                         {service.duration}
                       </span>
-                      <span className="font-medium">${service.price}</span>
                     </div>
                   </div>
+                  
+                  <div className="mt-2 space-y-1">
+                    <p className="text-sm text-gray-500">{service.availability}</p>
+                    <ul className="mt-2 space-y-1">
+                      {service.features.map((feature, idx) => (
+                        <li key={idx} className="flex items-start text-xs text-gray-600">
+                          <Check className="h-3 w-3 text-green-500 mr-1 mt-0.5 flex-shrink-0" />
+                          <span>{feature}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
                 </CardContent>
-                <CardFooter>
-                  <Button 
-                    className="w-full" 
-                    onClick={() => handleBookService(service.id)}
-                  >
-                    <CalendarCheck className="h-4 w-4 mr-2" />
-                    Book Now
-                  </Button>
+                <CardFooter className="pt-2">
+                  <div className="w-full flex items-center justify-between">
+                    <span className="font-bold text-lg">${service.price}</span>
+                    <Button 
+                      className="flex items-center" 
+                      onClick={() => handleBookService(service.id)}
+                    >
+                      <CalendarCheck className="h-4 w-4 mr-2" />
+                      Book Now
+                    </Button>
+                  </div>
                 </CardFooter>
               </Card>
             ))
