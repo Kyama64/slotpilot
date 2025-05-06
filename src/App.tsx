@@ -25,6 +25,7 @@ import GitHubDashboard from "./pages/GitHubDashboard";
 import Admin from "./pages/Admin";
 import CustomerLogin from "./pages/CustomerLogin";
 import ProviderLogin from "./pages/ProviderLogin";
+import Referrals from "./pages/Referrals";
 
 const queryClient = new QueryClient();
 
@@ -53,6 +54,7 @@ const App = () => (
           <Route path="/github/callback" element={<GitHubCallback />} />
           <Route path="/github/dashboard" element={<GitHubDashboard />} />
           <Route path="/admin" element={<Admin />} />
+          <Route path="/referrals" element={<Referrals />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>

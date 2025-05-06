@@ -1,6 +1,6 @@
 
-import { useState } from "react";
-import { useNavigate, Link } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { useNavigate, Link, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -11,8 +11,21 @@ const CustomerLogin = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [referralCode, setReferralCode] = useState("");
   const { toast } = useToast();
   const navigate = useNavigate();
+  const location = useLocation();
+
+  useEffect(() => {
+    // Extract referral code from URL if present
+    const params = new URLSearchParams(location.search);
+    const ref = params.get("ref");
+    if (ref) {
+      setReferralCode(ref);
+      // Store referral code in local storage for later use during signup
+      localStorage.setItem("referralCode", ref);
+    }
+  }, [location.search]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -45,6 +58,15 @@ const CustomerLogin = () => {
       });
     } finally {
       setIsLoading(false);
+    }
+  };
+
+  const handleSignup = () => {
+    // If there's a referral code, pass it to the signup page
+    if (referralCode) {
+      navigate(`/signup?ref=${referralCode}`);
+    } else {
+      navigate('/signup');
     }
   };
 
@@ -100,10 +122,22 @@ const CustomerLogin = () => {
           <div className="mt-6 text-center">
             <p className="text-sm text-gray-600">
               Don't have an account?{" "}
-              <Link to="/signup" className="text-primary hover:underline">
+              <button
+                onClick={handleSignup}
+                className="text-primary hover:underline cursor-pointer"
+              >
                 Sign up
-              </Link>
+              </button>
             </p>
+            
+            {referralCode && (
+              <div className="mt-3 p-2 bg-primary/10 rounded-md border border-primary/20 text-sm">
+                <p>You have a referral code: <strong>{referralCode}</strong></p>
+                <p className="text-xs text-muted-foreground mt-1">
+                  Sign up to receive special benefits!
+                </p>
+              </div>
+            )}
           </div>
         </div>
         

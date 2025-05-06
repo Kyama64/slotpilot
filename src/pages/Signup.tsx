@@ -1,6 +1,6 @@
 
-import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -12,9 +12,24 @@ const Signup = () => {
   const [businessName, setBusinessName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [referralCode, setReferralCode] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
+  const location = useLocation();
   const { toast } = useToast();
+
+  useEffect(() => {
+    // Extract referral code from URL if present
+    const params = new URLSearchParams(location.search);
+    const ref = params.get("ref");
+    if (ref) {
+      setReferralCode(ref);
+      toast({
+        title: "Referral code applied",
+        description: `You're signing up with a referral code: ${ref}`,
+      });
+    }
+  }, [location.search, toast]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -39,7 +54,7 @@ const Signup = () => {
 
     try {
       setIsLoading(true);
-      // In a real app, this would be an API call to register
+      // In a real app, this would be an API call to register and would include the referral code
       // For now, we'll simulate a successful signup
       setTimeout(() => {
         toast({
@@ -109,6 +124,25 @@ const Signup = () => {
                   required
                 />
               </div>
+              
+              {!referralCode && (
+                <div className="space-y-2">
+                  <Label htmlFor="referralCode">Referral Code (Optional)</Label>
+                  <Input
+                    id="referralCode"
+                    placeholder="Enter referral code"
+                    value={referralCode}
+                    onChange={(e) => setReferralCode(e.target.value)}
+                  />
+                </div>
+              )}
+              
+              {referralCode && (
+                <div className="p-3 bg-primary/10 rounded-md border border-primary/20 text-sm">
+                  <p className="font-medium">Referral code applied: {referralCode}</p>
+                  <p className="text-muted-foreground text-xs mt-1">You'll both receive rewards when you subscribe to a paid plan</p>
+                </div>
+              )}
 
               <div className="space-y-4">
                 <div className="flex items-start space-x-2">
