@@ -7,8 +7,9 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
 import { Badge } from "@/components/ui/badge";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import AvailabilityViewer from "@/components/customer/AvailabilityViewer";
+import { supabase } from "@/integrations/supabase/client";
 
 interface TimeSlot {
   id: string;
@@ -103,8 +104,10 @@ const Booking = () => {
   const [customerEmail, setCustomerEmail] = useState<string>("");
   const [customerPhone, setCustomerPhone] = useState<string>("");
   const [businessData, setBusinessData] = useState<any>(null);
+  const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
   const { toast } = useToast();
   const { businessId } = useParams<{ businessId: string }>();
+  const navigate = useNavigate();
 
   useEffect(() => {
     // In a real app, you'd fetch the business data from an API using the businessId
@@ -142,7 +145,7 @@ const Booking = () => {
     }
   };
 
-  const handleBookAppointment = () => {
+  const handleBookAppointment = async () => {
     // Validate form
     if (!customerName || !customerEmail || !customerPhone) {
       toast({
@@ -153,20 +156,62 @@ const Booking = () => {
       return;
     }
 
-    // In a real app, you'd send this data to your API
-    toast({
-      title: "Booking confirmed!",
-      description: "Check your email for confirmation details.",
-      variant: "default",
-    });
-    
-    // Reset form
-    setStep(1);
-    setSelectedService(null);
-    setSelectedTimeSlot(null);
-    setCustomerName("");
-    setCustomerEmail("");
-    setCustomerPhone("");
+    setIsSubmitting(true);
+
+    try {
+      // In a real app with Supabase, you'd save the booking to the database
+      // Here's a placeholder for the Supabase code:
+      
+      /*
+      const { data, error } = await supabase
+        .from('Booking')
+        .insert({
+          userId: businessId,
+          serviceId: selectedService,
+          customerName,
+          customerEmail,
+          customerPhone,
+          startTime: new Date(`${selectedDate?.toISOString().split('T')[0]}T${selectedTimeSlot?.time}`).toISOString(),
+          endTime: new Date(`${selectedDate?.toISOString().split('T')[0]}T${selectedTimeSlot?.time}`).toISOString(), // This would need to add the duration
+          status: 'confirmed'
+        });
+
+      if (error) throw error;
+      */
+      
+      // For now, simulate a network request
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      
+      // Show a toast notification
+      toast({
+        title: "Booking confirmed!",
+        description: "Check your email for confirmation details.",
+        variant: "default",
+      });
+      
+      // Redirect to booking success page
+      navigate(`/booking-success/${businessId}`, { 
+        state: { 
+          businessName: businessData?.name,
+          serviceName: selectedServiceData?.name,
+          servicePrice: selectedServiceData?.price,
+          bookingDate: selectedDate?.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' }),
+          bookingTime: selectedTimeSlot?.time,
+          customerName,
+          customerEmail
+        } 
+      });
+      
+    } catch (error) {
+      console.error("Booking error:", error);
+      toast({
+        title: "Booking failed",
+        description: "There was an error processing your booking. Please try again.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const selectedServiceData = selectedService && businessData?.services 
@@ -386,8 +431,9 @@ const Booking = () => {
               <Button 
                 onClick={handleBookAppointment}
                 className="bg-success hover:bg-success/90 text-sm"
+                disabled={isSubmitting}
               >
-                Confirm Booking
+                {isSubmitting ? "Processing..." : "Confirm Booking"}
               </Button>
             )}
           </CardFooter>

@@ -15,6 +15,7 @@ import Customers from "./pages/Customers";
 import Analytics from "./pages/Analytics";
 import Settings from "./pages/Settings";
 import Booking from "./pages/Booking";
+import BookingSuccess from "./pages/BookingSuccess";
 import Features from "./pages/Features";
 import Pricing from "./pages/Pricing";
 import NotFound from "./pages/NotFound";
@@ -47,6 +48,7 @@ const App = () => (
           <Route path="/analytics" element={<Analytics />} />
           <Route path="/settings" element={<Settings />} />
           <Route path="/book/:businessId" element={<Booking />} />
+          <Route path="/booking-success/:businessId" element={<BookingSuccess />} />
           <Route path="/features" element={<Features />} />
           <Route path="/pricing" element={<Pricing />} />
           <Route path="/marketplace" element={<ServiceMarketplace />} />
