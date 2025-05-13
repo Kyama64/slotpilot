@@ -1,33 +1,20 @@
-
 import { useState, useEffect } from "react";
-import { Calendar, Clock, Check, MapPin, Phone, Mail, Star } from "lucide-react";
+import { MapPin, Phone, Mail, Star } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Label } from "@/components/ui/label";
-import { Calendar as CalendarComponent } from "@/components/ui/calendar";
 import { useToast } from "@/hooks/use-toast";
 import { Badge } from "@/components/ui/badge";
 import { useParams } from "react-router-dom";
+import AvailabilityViewer from "@/components/customer/AvailabilityViewer";
 
 interface TimeSlot {
   id: string;
   time: string;
   available: boolean;
 }
-
-const mockTimeSlots = [
-  { id: "1", time: "9:00 AM", available: true },
-  { id: "2", time: "10:00 AM", available: true },
-  { id: "3", time: "11:00 AM", available: false },
-  { id: "4", time: "12:00 PM", available: true },
-  { id: "5", time: "1:00 PM", available: true },
-  { id: "6", time: "2:00 PM", available: false },
-  { id: "7", time: "3:00 PM", available: true },
-  { id: "8", time: "4:00 PM", available: true },
-  { id: "9", time: "5:00 PM", available: false },
-];
 
 interface Service {
   id: string;
@@ -108,10 +95,10 @@ const mockBusinessData = {
 };
 
 const Booking = () => {
-  const [date, setDate] = useState<Date | undefined>(new Date());
-  const [selectedService, setSelectedService] = useState<string | null>(null);
-  const [selectedTimeSlot, setSelectedTimeSlot] = useState<string | null>(null);
   const [step, setStep] = useState<number>(1);
+  const [selectedService, setSelectedService] = useState<string | null>(null);
+  const [selectedDate, setSelectedDate] = useState<Date | undefined>(new Date());
+  const [selectedTimeSlot, setSelectedTimeSlot] = useState<TimeSlot | null>(null);
   const [customerName, setCustomerName] = useState<string>("");
   const [customerEmail, setCustomerEmail] = useState<string>("");
   const [customerPhone, setCustomerPhone] = useState<string>("");
@@ -136,19 +123,15 @@ const Booking = () => {
     setSelectedService(serviceId);
   };
 
-  const handleTimeSlotSelect = (slotId: string) => {
-    setSelectedTimeSlot(slotId);
-  };
-
-  const handleDateSelect = (date: Date | undefined) => {
-    setDate(date);
-    // In a real app, you'd fetch available time slots for the selected date
+  const handleTimeSlotSelect = (date: Date, timeSlot: TimeSlot) => {
+    setSelectedDate(date);
+    setSelectedTimeSlot(timeSlot);
   };
 
   const handleNextStep = () => {
     if (step === 1 && selectedService) {
       setStep(2);
-    } else if (step === 2 && date && selectedTimeSlot) {
+    } else if (step === 2 && selectedDate && selectedTimeSlot) {
       setStep(3);
     }
   };
@@ -188,10 +171,6 @@ const Booking = () => {
 
   const selectedServiceData = selectedService && businessData?.services 
     ? businessData.services.find((service: Service) => service.id === selectedService) 
-    : null;
-
-  const selectedTimeSlotData = selectedTimeSlot 
-    ? mockTimeSlots.find(slot => slot.id === selectedTimeSlot) 
     : null;
 
   if (!businessData) {
@@ -250,7 +229,9 @@ const Booking = () => {
           <div className="flex flex-wrap justify-start gap-3 mb-4">
             {businessData.planFeatures.map((feature: string, index: number) => (
               <div key={index} className="flex items-center text-xs md:text-sm text-gray-600">
-                <Check className="h-3 w-3 md:h-4 md:w-4 text-green-500 mr-1" />
+                <svg className="h-3 w-3 md:h-4 md:w-4 text-green-500 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                </svg>
                 <span>{feature}</span>
               </div>
             ))}
@@ -317,51 +298,11 @@ const Booking = () => {
             {step === 2 && (
               <div className="animate-fade-in">
                 <h3 className="font-medium text-lg mb-4">Select Date & Time</h3>
-                <Tabs defaultValue="calendar" className="w-full">
-                  <TabsList className="mb-4">
-                    <TabsTrigger value="calendar">Calendar</TabsTrigger>
-                    <TabsTrigger value="timeSlots">Time Slots</TabsTrigger>
-                  </TabsList>
-                  <TabsContent value="calendar" className="space-y-4">
-                    <div className="flex justify-center">
-                      <CalendarComponent
-                        mode="single"
-                        selected={date}
-                        onSelect={handleDateSelect}
-                        className="rounded-md border p-2 md:p-3 pointer-events-auto"
-                        disabled={(date) => {
-                          // Disable past dates and Sundays (day 0)
-                          const today = new Date();
-                          today.setHours(0, 0, 0, 0);
-                          return date < today || date.getDay() === 0;
-                        }}
-                      />
-                    </div>
-                  </TabsContent>
-                  <TabsContent value="timeSlots">
-                    <div className="mb-3 text-center text-sm text-gray-500">
-                      {date ? (
-                        <span>Available times for {date.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' })}</span>
-                      ) : (
-                        <span>Please select a date first</span>
-                      )}
-                    </div>
-                    <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 md:gap-3">
-                      {mockTimeSlots.map((slot) => (
-                        <Button
-                          key={slot.id}
-                          variant={selectedTimeSlot === slot.id ? "default" : "outline"}
-                          className={`flex items-center justify-center text-xs md:text-sm ${!slot.available ? 'opacity-50 cursor-not-allowed' : ''}`}
-                          disabled={!slot.available}
-                          onClick={() => slot.available && handleTimeSlotSelect(slot.id)}
-                        >
-                          <Clock className="mr-1 h-3 w-3 md:h-4 md:w-4" />
-                          {slot.time}
-                        </Button>
-                      ))}
-                    </div>
-                  </TabsContent>
-                </Tabs>
+                <AvailabilityViewer 
+                  providerId={businessId || ""}
+                  serviceId={selectedService || undefined}
+                  onTimeSelected={handleTimeSlotSelect}
+                />
               </div>
             )}
 
@@ -379,10 +320,10 @@ const Booking = () => {
                     <div>{selectedServiceData?.duration}</div>
                     
                     <div className="text-gray-500">Date:</div>
-                    <div>{date?.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' })}</div>
+                    <div>{selectedDate?.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' })}</div>
                     
                     <div className="text-gray-500">Time:</div>
-                    <div>{selectedTimeSlotData?.time}</div>
+                    <div>{selectedTimeSlot?.time}</div>
                     
                     <div className="text-gray-500">Price:</div>
                     <div className="font-medium">{selectedServiceData?.price}</div>

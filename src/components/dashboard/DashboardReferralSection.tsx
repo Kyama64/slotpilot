@@ -3,9 +3,18 @@ import { Gift, Award, Share2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { useNavigate } from "react-router-dom";
+import { toast } from "sonner";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 const DashboardReferralSection = () => {
   const navigate = useNavigate();
+  const isMobile = useIsMobile();
+  
+  const handleCopyReferralLink = () => {
+    const url = `${window.location.origin}/signup?ref=SNAP123456`;
+    navigator.clipboard.writeText(url);
+    toast.success("Referral link copied to clipboard!");
+  };
   
   return (
     <Card>
@@ -18,7 +27,7 @@ const DashboardReferralSection = () => {
       </CardHeader>
       <CardContent>
         <div className="space-y-4">
-          <div className="flex justify-between">
+          <div className={`flex ${isMobile ? 'flex-col space-y-4' : 'justify-between'}`}>
             <div className="flex items-center gap-2">
               <div className="bg-primary/10 p-2 rounded-full">
                 <Award className="h-4 w-4 text-primary" />
@@ -39,19 +48,20 @@ const DashboardReferralSection = () => {
             </div>
           </div>
           
-          <div className="flex justify-between pt-2">
+          <div className={`flex pt-2 ${isMobile ? 'flex-col space-y-2' : 'justify-between'}`}>
             <Button 
               variant="outline" 
               size="sm" 
-              onClick={() => {
-                const url = `${window.location.origin}/signup?ref=SNAP123456`;
-                navigator.clipboard.writeText(url);
-                alert("Referral link copied to clipboard!");
-              }}
+              onClick={handleCopyReferralLink}
+              className={isMobile ? 'w-full' : ''}
             >
               Copy Referral Link
             </Button>
-            <Button size="sm" onClick={() => navigate("/referrals")}>
+            <Button 
+              size="sm" 
+              onClick={() => navigate("/referrals")}
+              className={isMobile ? 'w-full' : ''}
+            >
               View Full Program
             </Button>
           </div>

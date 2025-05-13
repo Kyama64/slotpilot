@@ -3,6 +3,7 @@ import { useState } from "react";
 import { Gift, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 type ReferralBannerProps = {
   referralCode?: string;
@@ -11,6 +12,7 @@ type ReferralBannerProps = {
 
 const ReferralBanner = ({ referralCode = "", onDismiss }: ReferralBannerProps) => {
   const [dismissed, setDismissed] = useState(false);
+  const isMobile = useIsMobile();
 
   if (dismissed) return null;
 
@@ -56,8 +58,8 @@ const ReferralBanner = ({ referralCode = "", onDismiss }: ReferralBannerProps) =
           )}
         </div>
         <Button 
-          size="sm" 
-          className="mt-2 sm:mt-0"
+          size={isMobile ? "sm" : "default"} 
+          className="mt-2 sm:mt-0 w-full sm:w-auto"
           onClick={() => window.location.href = "/referrals"}
         >
           View Referral Program
