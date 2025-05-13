@@ -24,6 +24,8 @@ import {
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useToast } from "@/hooks/use-toast";
 import { useIsMobile } from "@/hooks/use-mobile";
+import DashboardReferralSection from "@/components/dashboard/DashboardReferralSection";
+import AvailabilityManager from "@/components/provider/AvailabilityManager";
 
 interface Booking {
   id: string;
@@ -82,6 +84,7 @@ const Dashboard = () => {
   const isMobile = useIsMobile();
   const { toast } = useToast();
   const navigate = useNavigate();
+  const [showAvailability, setShowAvailability] = useState(false);
 
   const todayBookings = mockBookings.filter(booking => booking.date === "2025-04-29");
   const confirmedBookings = mockBookings.filter(booking => booking.status === "confirmed");
@@ -161,6 +164,13 @@ const Dashboard = () => {
                   <Settings className="h-5 w-5" />
                   {sidebarOpen && <span>Settings</span>}
                 </Link>
+                <Link
+                  to="/referrals"
+                  className="flex items-center space-x-3 px-3 py-2 rounded-md text-gray-700 hover:bg-gray-100"
+                >
+                  <Calendar className="h-5 w-5" />
+                  {sidebarOpen && <span>Referrals</span>}
+                </Link>
               </nav>
             </div>
             <div className="p-4 border-t border-gray-100">
@@ -196,6 +206,10 @@ const Dashboard = () => {
                 <h1 className="text-xl font-semibold">Bookings</h1>
               </div>
               <div className="flex items-center space-x-4">
+                <Button onClick={() => setShowAvailability(!showAvailability)} variant="outline">
+                  <Clock className="h-4 w-4 mr-2" />
+                  Manage Availability
+                </Button>
                 <Button onClick={handleNewBooking} className="flex items-center">
                   <Plus className="h-4 w-4 mr-2" />
                   New Booking
@@ -205,6 +219,16 @@ const Dashboard = () => {
           </header>
 
           <main className="flex-1 overflow-y-auto p-6">
+            {/* Referral Banner */}
+            <DashboardReferralSection />
+            
+            {/* Availability Management (when toggled) */}
+            {showAvailability && (
+              <div className="mb-6">
+                <AvailabilityManager />
+              </div>
+            )}
+
             {/* Dashboard metrics */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
               <Card>
