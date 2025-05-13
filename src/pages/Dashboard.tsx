@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import {
@@ -11,7 +10,8 @@ import {
   Plus,
   CalendarCheck,
   CalendarX,
-  Menu
+  Menu,
+  List
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
@@ -24,7 +24,6 @@ import {
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useToast } from "@/hooks/use-toast";
 import { useIsMobile } from "@/hooks/use-mobile";
-import DashboardReferralSection from "@/components/dashboard/DashboardReferralSection";
 import AvailabilityManager from "@/components/provider/AvailabilityManager";
 
 interface Booking {
@@ -137,11 +136,11 @@ const Dashboard = () => {
                   {sidebarOpen && <span>Bookings</span>}
                 </Link>
                 <Link
-                  to="/services"
+                  to="/my-services"
                   className="flex items-center space-x-3 px-3 py-2 rounded-md text-gray-700 hover:bg-gray-100"
                 >
-                  <Clock className="h-5 w-5" />
-                  {sidebarOpen && <span>Services</span>}
+                  <List className="h-5 w-5" />
+                  {sidebarOpen && <span>My Services</span>}
                 </Link>
                 <Link
                   to="/customers"
@@ -219,9 +218,6 @@ const Dashboard = () => {
           </header>
 
           <main className="flex-1 overflow-y-auto p-6">
-            {/* Referral Banner */}
-            <DashboardReferralSection />
-            
             {/* Availability Management (when toggled) */}
             {showAvailability && (
               <div className="mb-6">

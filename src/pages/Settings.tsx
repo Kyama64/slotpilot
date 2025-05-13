@@ -10,12 +10,11 @@ import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { toast } from "sonner";
 
-// Mock services data
+// Mock services data for the provider - this matches with the MyServices page
 const mockServices = [
-  { id: "1", name: "Haircut", duration: 30 },
-  { id: "2", name: "Hair Color", duration: 120 },
-  { id: "3", name: "Styling", duration: 45 },
-  { id: "4", name: "Massage", duration: 60 },
+  { id: "s1", name: "Professional Haircut", duration: 45 },
+  { id: "s2", name: "Hair Coloring", duration: 90 },
+  { id: "s3", name: "Hair Styling", duration: 60 },
 ];
 
 const Settings = () => {

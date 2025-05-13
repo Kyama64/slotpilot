@@ -1,4 +1,3 @@
-
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -27,6 +26,7 @@ import Admin from "./pages/Admin";
 import CustomerLogin from "./pages/CustomerLogin";
 import ProviderLogin from "./pages/ProviderLogin";
 import Referrals from "./pages/Referrals";
+import MyServices from "./pages/MyServices";
 
 const queryClient = new QueryClient();
 
@@ -57,6 +57,7 @@ const App = () => (
           <Route path="/github/dashboard" element={<GitHubDashboard />} />
           <Route path="/admin" element={<Admin />} />
           <Route path="/referrals" element={<Referrals />} />
+          <Route path="/my-services" element={<MyServices />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>
