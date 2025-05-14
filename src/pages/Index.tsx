@@ -1,4 +1,3 @@
-
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import Header from "@/components/layout/Header";
@@ -38,7 +37,7 @@ const Index = () => {
               <div className="lg:w-1/2 animate-fade-in">
                 <div className="glass-card rounded-2xl overflow-hidden shadow-xl p-1 max-w-md mx-auto">
                   <img 
-                    src="https://images.unsplash.com/photo-1588349482083-036b31c6eca3?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=80" 
+                    src="https://images.unsplash.com/photo-1498050108023-c5249f4df085?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=80" 
                     alt="Calendar scheduling interface" 
                     className="w-full h-auto rounded-xl" 
                   />
@@ -50,11 +49,21 @@ const Index = () => {
             <div className="mt-16 border-t border-gray-200 pt-8">
               <p className="text-center text-sm font-medium text-gray-500 mb-6">TRUSTED BY 10,000+ BUSINESSES WORLDWIDE</p>
               <div className="flex flex-wrap justify-center items-center gap-8 opacity-80">
-                <img src="https://via.placeholder.com/120x40?text=COMPANY" alt="Company logo" className="h-8" />
-                <img src="https://via.placeholder.com/120x40?text=COMPANY" alt="Company logo" className="h-8" />
-                <img src="https://via.placeholder.com/120x40?text=COMPANY" alt="Company logo" className="h-8" />
-                <img src="https://via.placeholder.com/120x40?text=COMPANY" alt="Company logo" className="h-8" />
-                <img src="https://via.placeholder.com/120x40?text=COMPANY" alt="Company logo" className="h-8" />
+                <div className="bg-gray-100 px-6 py-3 rounded-lg">
+                  <span className="text-gray-700 font-semibold">COMPANY 1</span>
+                </div>
+                <div className="bg-gray-100 px-6 py-3 rounded-lg">
+                  <span className="text-gray-700 font-semibold">COMPANY 2</span>
+                </div>
+                <div className="bg-gray-100 px-6 py-3 rounded-lg">
+                  <span className="text-gray-700 font-semibold">COMPANY 3</span>
+                </div>
+                <div className="bg-gray-100 px-6 py-3 rounded-lg">
+                  <span className="text-gray-700 font-semibold">COMPANY 4</span>
+                </div>
+                <div className="bg-gray-100 px-6 py-3 rounded-lg">
+                  <span className="text-gray-700 font-semibold">COMPANY 5</span>
+                </div>
               </div>
             </div>
           </div>
@@ -113,11 +122,11 @@ const Index = () => {
                   </div>
                   <div className="flex items-start">
                     <Check className="h-5 w-5 text-success flex-shrink-0 mr-2 mt-1" />
-                    <span className="text-gray-600">Book appointments with real-time availability</span>
+                    <span>Book appointments with real-time availability</span>
                   </div>
                   <div className="flex items-start">
                     <Check className="h-5 w-5 text-success flex-shrink-0 mr-2 mt-1" />
-                    <span className="text-gray-600">Manage your bookings in one place</span>
+                    <span>Manage your bookings in one place</span>
                   </div>
                 </div>
                 <div className="mt-8 flex flex-col space-y-3">
@@ -142,15 +151,15 @@ const Index = () => {
                 <div className="space-y-4">
                   <div className="flex items-start">
                     <Check className="h-5 w-5 text-success flex-shrink-0 mr-2 mt-1" />
-                    <span className="text-gray-600">Create a professional booking page</span>
+                    <span>Create a professional booking page</span>
                   </div>
                   <div className="flex items-start">
                     <Check className="h-5 w-5 text-success flex-shrink-0 mr-2 mt-1" />
-                    <span className="text-gray-600">Manage your services and availability</span>
+                    <span>Manage your services and availability</span>
                   </div>
                   <div className="flex items-start">
                     <Check className="h-5 w-5 text-success flex-shrink-0 mr-2 mt-1" />
-                    <span className="text-gray-600">Get insights into your booking performance</span>
+                    <span>Get insights into your booking performance</span>
                   </div>
                 </div>
                 <div className="mt-8 flex flex-col space-y-3">
