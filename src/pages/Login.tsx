@@ -1,53 +1,26 @@
 
 import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Calendar } from "lucide-react";
-import { useToast } from "@/hooks/use-toast";
+import { useAuth } from "@/contexts/AuthContext";
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
-  const navigate = useNavigate();
-  const { toast } = useToast();
+  const { signIn, isLoading } = useAuth();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
     if (!email || !password) {
-      toast({
-        title: "Missing information",
-        description: "Please enter both email and password.",
-        variant: "destructive",
-      });
       return;
     }
 
-    try {
-      setIsLoading(true);
-      // In a real app, this would be an API call to authenticate
-      // For now, we'll simulate a successful login
-      setTimeout(() => {
-        toast({
-          title: "Login successful",
-          description: "Welcome back!",
-        });
-        
-        navigate("/dashboard");
-        setIsLoading(false);
-      }, 1000);
-    } catch (error) {
-      toast({
-        title: "Login failed",
-        description: "Please check your credentials and try again.",
-        variant: "destructive",
-      });
-      setIsLoading(false);
-    }
+    await signIn(email, password);
   };
 
   return (

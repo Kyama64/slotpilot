@@ -7,16 +7,18 @@ import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Calendar, Check } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { useAuth } from "@/contexts/AuthContext";
 
 const Signup = () => {
   const [businessName, setBusinessName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [phone, setPhone] = useState("");
   const [referralCode, setReferralCode] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
-  const navigate = useNavigate();
+  const [termsAccepted, setTermsAccepted] = useState(false);
   const location = useLocation();
   const { toast } = useToast();
+  const { signUp, isLoading } = useAuth();
 
   useEffect(() => {
     // Extract referral code from URL if present
@@ -34,7 +36,7 @@ const Signup = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
-    if (!businessName || !email || !password) {
+    if (!businessName || !email || !password || !phone) {
       toast({
         title: "Missing information",
         description: "Please fill out all fields.",
@@ -51,28 +53,18 @@ const Signup = () => {
       });
       return;
     }
-
-    try {
-      setIsLoading(true);
-      // In a real app, this would be an API call to register and would include the referral code
-      // For now, we'll simulate a successful signup
-      setTimeout(() => {
-        toast({
-          title: "Account created successfully",
-          description: "Welcome to SnapSchedule!",
-        });
-        
-        navigate("/dashboard");
-        setIsLoading(false);
-      }, 1000);
-    } catch (error) {
+    
+    if (!termsAccepted) {
       toast({
-        title: "Sign up failed",
-        description: "There was an error creating your account. Please try again.",
+        title: "Terms not accepted",
+        description: "You must accept the terms and conditions.",
         variant: "destructive",
       });
-      setIsLoading(false);
+      return;
     }
+
+    // Use the signUp function from auth context
+    await signUp(email, password, businessName, phone);
   };
 
   return (
@@ -124,6 +116,17 @@ const Signup = () => {
                   required
                 />
               </div>
+              <div className="space-y-2">
+                <Label htmlFor="phone">Phone Number</Label>
+                <Input
+                  id="phone"
+                  type="tel"
+                  placeholder="Your Phone Number"
+                  value={phone}
+                  onChange={(e) => setPhone(e.target.value)}
+                  required
+                />
+              </div>
               
               {!referralCode && (
                 <div className="space-y-2">
@@ -151,6 +154,8 @@ const Signup = () => {
                       id="terms"
                       type="checkbox"
                       className="w-4 h-4 border border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-primary"
+                      checked={termsAccepted}
+                      onChange={(e) => setTermsAccepted(e.target.checked)}
                       required
                     />
                   </div>

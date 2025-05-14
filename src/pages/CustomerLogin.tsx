@@ -4,17 +4,16 @@ import { useNavigate, Link, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { useToast } from "@/hooks/use-toast";
 import { UserCircle, ArrowLeft } from "lucide-react";
+import { useAuth } from "@/contexts/AuthContext";
 
 const CustomerLogin = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
   const [referralCode, setReferralCode] = useState("");
-  const { toast } = useToast();
-  const navigate = useNavigate();
   const location = useLocation();
+  const navigate = useNavigate();
+  const { signIn, isLoading } = useAuth();
 
   useEffect(() => {
     // Extract referral code from URL if present
@@ -29,36 +28,7 @@ const CustomerLogin = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setIsLoading(true);
-    
-    // This would be replaced with actual authentication logic
-    try {
-      // Simulate authentication delay
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      
-      // For demo purposes, we'll just check if the email and password are valid
-      if (email && password) {
-        toast({
-          title: "Login successful",
-          description: "Redirecting you to the marketplace...",
-        });
-        navigate("/marketplace");
-      } else {
-        toast({
-          title: "Login failed",
-          description: "Please check your email and password.",
-          variant: "destructive",
-        });
-      }
-    } catch (error) {
-      toast({
-        title: "Login failed",
-        description: "An error occurred during login. Please try again.",
-        variant: "destructive",
-      });
-    } finally {
-      setIsLoading(false);
-    }
+    await signIn(email, password);
   };
 
   const handleSignup = () => {
