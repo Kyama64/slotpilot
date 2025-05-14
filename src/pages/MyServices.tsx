@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { Search, Plus, Clock, Edit, Trash2 } from "lucide-react";
@@ -67,6 +66,7 @@ const MyServices = () => {
     description: string;
     price: number;
     duration: number;
+    image: string;  // Added image to match the type
   }>(null);
   
   // Filter services based on search query
@@ -123,7 +123,7 @@ const MyServices = () => {
       return;
     }
     
-    // Update the service
+    // Update the service - making sure to preserve the image property
     setServices(services.map(service => 
       service.id === editingService.id ? editingService : service
     ));
