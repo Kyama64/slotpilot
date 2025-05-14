@@ -222,11 +222,11 @@ const Index = () => {
                 </div>
               </div>
               
-              {/* Feature 2 */}
+              {/* Feature 2 - Fixing the image for automated reminders section */}
               <div className="flex flex-col-reverse md:flex-row items-center gap-8">
                 <div className="md:w-1/2">
                   <img 
-                    src="https://images.unsplash.com/photo-1578091879915-33e5e0c55c33?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80" 
+                    src="https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80" 
                     alt="Automated reminders interface" 
                     className="rounded-xl shadow-lg w-full" 
                   />
