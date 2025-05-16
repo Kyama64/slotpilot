@@ -29,6 +29,10 @@ import CustomerLogin from "./pages/CustomerLogin";
 import ProviderLogin from "./pages/ProviderLogin";
 import Referrals from "./pages/Referrals";
 import MyServices from "./pages/MyServices";
+import About from "./pages/About";
+import Contact from "./pages/Contact";
+import Privacy from "./pages/Privacy";
+import Terms from "./pages/Terms";
 
 const queryClient = new QueryClient();
 
@@ -61,6 +65,10 @@ const App = () => (
             <Route path="/admin" element={<Admin />} />
             <Route path="/referrals" element={<Referrals />} />
             <Route path="/my-services" element={<MyServices />} />
+            <Route path="/about" element={<About />} />
+            <Route path="/contact" element={<Contact />} />
+            <Route path="/privacy" element={<Privacy />} />
+            <Route path="/terms" element={<Terms />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </AuthProvider>
